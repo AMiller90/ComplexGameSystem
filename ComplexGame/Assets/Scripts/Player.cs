@@ -14,7 +14,9 @@ public class Player : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-    }
+	    if (muzzleTransform == null)
+	        muzzleTransform = gameObject.GetComponentInChildren<Transform>();
+	}
 	
 	// Update is called once per frame
 	void Update ()
@@ -24,6 +26,7 @@ public class Player : MonoBehaviour
         Move();
 
 	    Shoot();
+
 	}
 
     private void Move()
@@ -40,18 +43,27 @@ public class Player : MonoBehaviour
 
     private void Shoot()
     {
-        Vector3 displacement = (Input.mousePosition - transform.position);
-        displacement.Normalize();
+        //Get mouse position
+        Vector3 mousePosition = Input.mousePosition;
+        //Set the z position to 25 to offset with the camera
+        mousePosition.z = 25;
 
-        Debug.DrawLine(muzzleTransform.position, Input.mousePosition);
+        //Get the displacement between mouse an muzzle position
+        Vector3 displacement = Camera.main.ScreenToWorldPoint(mousePosition) - muzzleTransform.position;
+        //Get the direction
+        Vector3 bulletdirection = displacement.normalized;
 
+        Debug.DrawLine(muzzleTransform.position, Camera.main.ScreenToWorldPoint(mousePosition));
+
+        //If left click
         if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
+        {//Instantiate a bullet
             GameObject gbullet = Instantiate(bullet, muzzleTransform.position, muzzleTransform.rotation) as GameObject;
+            //Give it a speed
             gbullet.GetComponent<Bullet>().Speed = 10;
-            gbullet.GetComponent<Bullet>().Direction = displacement;
+            //Give it a direction
+            gbullet.GetComponent<Bullet>().Direction = bulletdirection;
         }
-       
     }
 
     private void CheckBounds()
