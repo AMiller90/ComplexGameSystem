@@ -22,14 +22,5 @@ public class Bullet : MonoBehaviour
 	void Update ()
 	{
 	    transform.position += direction * (Time.deltaTime *speed);
-        BulletLifeTime();
 	}
-
-    private void BulletLifeTime()
-    {
-        if (transform.position.x <= -18.5 || transform.position.x >= 18.5)
-            Destroy(gameObject);
-        if (transform.position.y <= 1.5f || transform.position.y >= 27.5f)
-            Destroy(gameObject);
-    }
 }

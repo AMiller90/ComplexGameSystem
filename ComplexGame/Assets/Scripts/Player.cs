@@ -8,35 +8,42 @@ public class Player : MonoBehaviour
     private GameObject bullet;
     [SerializeField]
     private Transform muzzleTransform;
+    [SerializeField]
+    private bool canJump;
 
+    public bool CanJump
+    {
+        get { return canJump; }
+        set { canJump = value; }
+    }
+
+    private Rigidbody playerBody;
     private float speed = 5;
 
 	// Use this for initialization
 	void Start ()
 	{
-	    if (muzzleTransform == null)
-	        muzzleTransform = gameObject.GetComponentInChildren<Transform>();
-	}
+	    if (playerBody == null)
+	        playerBody = GetComponent<Rigidbody>();
+
+        if (muzzleTransform == null)
+            muzzleTransform = gameObject.GetComponentInChildren<Transform>();
+    }
 	
 	// Update is called once per frame
 	void Update ()
-	{
-        CheckBounds();
-    
+	{ 
         Move();
-
+	    Jump();
 	    Shoot();
 
 	}
 
+
     private void Move()
     {
-        if (Input.GetKey(KeyCode.W))
-            transform.position += Vector3.up * speed * Time.deltaTime;
         if (Input.GetKey(KeyCode.A))
             transform.position += Vector3.left * speed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S))
-            transform.position += Vector3.down * speed * Time.deltaTime;
         if (Input.GetKey(KeyCode.D))
             transform.position += Vector3.right * speed * Time.deltaTime;
     }
@@ -66,15 +73,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void CheckBounds()
+    private void Jump()
     {
-        if (transform.position.x <= -18.5)
-            transform.position = new Vector3(-18.5f,transform.position.y,transform.position.z);
-        if (transform.position.x >= 18.5)
-            transform.position = new Vector3(18.5f, transform.position.y, transform.position.z);
-        if (transform.position.y <= 1.5f)
-            transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
-        if (transform.position.y >= 28.0f)
-            transform.position = new Vector3(transform.position.x, 28.0f, transform.position.z);
+        if (Input.GetKeyDown(KeyCode.Space) && canJump)
+        {
+           canJump = false;
+           playerBody.velocity = new Vector3(playerBody.velocity.x, 10, 0);
+        }
     }
 }
