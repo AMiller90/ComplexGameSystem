@@ -22,8 +22,8 @@ GameObject:
   - 33: {fileID: 33000013610831542}
   - 136: {fileID: 136000014000583606}
   - 23: {fileID: 23000011299742974}
-  - 114: {fileID: 114000014271895198}
   - 54: {fileID: 54000014067655166}
+  - 114: {fileID: 114000012429331496}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -93,9 +93,9 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 120
+  m_Constraints: 8
   m_CollisionDetection: 0
---- !u!114 &114000014271895198
+--- !u!114 &114000012429331496
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

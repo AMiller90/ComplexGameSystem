@@ -5,6 +5,7 @@ public class Bullet : MonoBehaviour
 {
     private float speed;
     private Vector3 direction;
+    private float damage;
 
     public float Speed
     {
@@ -16,6 +17,18 @@ public class Bullet : MonoBehaviour
     {
         get { return direction; }
         set { direction = value; }
+    }
+
+    public float Damage
+    {
+        get { return damage; }
+        set { damage = value; }
+    }
+
+    void Start()
+    {
+        damage = 5;
+        speed = 10;
     }
 
 	// Update is called once per frame
