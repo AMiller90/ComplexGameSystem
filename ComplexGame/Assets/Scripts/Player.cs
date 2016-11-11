@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
 public class Player : MonoBehaviour
 {
@@ -18,8 +17,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Animator anim;
 
-    private int jumpHash = Animator.StringToHash("Jump");
-
     private bool canJump;
 
     public bool CanJump
@@ -31,15 +28,29 @@ public class Player : MonoBehaviour
     private Rigidbody playerBody;
 
     private float health;
+    private float maxHealth;
     private float speed;
 
+    public float Health
+    {
+        get { return health; }
+        set { health = value; }
+    }
+
+    public float MaxHealth
+    {
+        get { return maxHealth; }
+    }
+    
 	// Use this for initialization
 	void Start ()
 	{
-	    health = 100;
+	    maxHealth = 100;
+	    health = maxHealth;
 	    speed = 0;
+        canJump = true;
 
-	    if (playerBody == null)
+        if (playerBody == null)
 	        playerBody = GetComponent<Rigidbody>();
 
         if (armTransform == null)
@@ -154,7 +165,12 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<Bullet>())
-            Debug.Log("Boop");
+        if (other.GetComponent<Bullet>())
+        {
+            health -= other.GetComponent<Bullet>().Damage;
+            if(health <= 0)
+                Destroy(gameObject);
+        }
+            
     }
 }
