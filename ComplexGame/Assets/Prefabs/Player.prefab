@@ -60,6 +60,7 @@ GameObject:
   - 114: {fileID: 114000010058121366}
   - 114: {fileID: 114000010504612916}
   - 114: {fileID: 114000011047185122}
+  - 114: {fileID: 114000010023491594}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -371,6 +372,25 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
+--- !u!114 &114000010023491594
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011504191856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590678366, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 95000013262350132}
+  m_ParameterSendBits: 0
+  param0: 
+  param1: 
+  param2: 
+  param3: 
+  param4: 
+  param5: 
 --- !u!114 &114000010058121366
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -414,9 +434,9 @@ MonoBehaviour:
   m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TransformSyncMode: 1
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.07692308
+  m_SyncRotationAxis: 3
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
   m_MovementTheshold: 0.001
@@ -434,6 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63cb8787636ef864eb952f93e72eb6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bullet: {fileID: 1000013294211762, guid: abfa22956bdf0fd418753c5ce20e3670, type: 2}
 --- !u!114 &114000011899937074
 MonoBehaviour:
   m_ObjectHideFlags: 1

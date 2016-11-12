@@ -4,7 +4,6 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
     private bool facingRight;
-
     [SerializeField]
     private GameObject bullet;
     [SerializeField]
@@ -13,6 +12,7 @@ public class Player : MonoBehaviour
     private Transform bodyTransform;
     [SerializeField]
     private Transform firePointTransform;
+
 
     [SerializeField]
     private Animator anim;
@@ -41,7 +41,25 @@ public class Player : MonoBehaviour
     {
         get { return maxHealth; }
     }
-    
+
+    void Awake()
+    {
+        if (playerBody == null)
+            playerBody = GetComponent<Rigidbody>();
+
+        if (armTransform == null)
+            armTransform = GetComponentsInChildren<Transform>()[2];
+
+        if (bodyTransform == null)
+            bodyTransform = GetComponentsInChildren<Transform>()[1];
+
+        if (firePointTransform == null)
+            firePointTransform = GetComponentsInChildren<Transform>()[4];
+
+        if (anim == null)
+            anim = GetComponent<Animator>();
+    }
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -49,23 +67,6 @@ public class Player : MonoBehaviour
 	    health = maxHealth;
 	    speed = 0;
         canJump = true;
-
-        if (playerBody == null)
-	        playerBody = GetComponent<Rigidbody>();
-
-        if (armTransform == null)
-            armTransform = GetComponentsInChildren<Transform>()[2];
-
-        if(bodyTransform == null)
-            bodyTransform = GetComponentsInChildren<Transform>()[1];
-
-        if (firePointTransform == null)
-            firePointTransform = GetComponentsInChildren<Transform>()[4];
-
-	    if (anim == null)
-	    {
-	        anim = GetComponent<Animator>();
-	    }
     }
 	
 	// Update is called once per frame
@@ -74,24 +75,22 @@ public class Player : MonoBehaviour
         Move();
 	    Jump();
 	    Shoot();
-
 	}
 
     private void Move()
     {
         anim.SetFloat("Speed", 0);
 
+
         if (Input.GetKeyDown(KeyCode.A) && !facingRight)
         {
-            Flip();
+            GetComponent<SetUpLocalPlayer>().CmdFlipBody(Flip());
         }
 
         if (Input.GetKeyDown(KeyCode.D) && facingRight)
         {
-            Flip();
+            GetComponent<SetUpLocalPlayer>().CmdFlipBody(Flip());
         }
-            
-
         //Move to the left
         if (Input.GetKey(KeyCode.A))
         {
@@ -124,6 +123,7 @@ public class Player : MonoBehaviour
 
         //Rotate the z axis as the mouse moves
         armTransform.rotation = Quaternion.Euler(0f, 0f, -rotZ + 90);
+        GetComponent<SetUpLocalPlayer>().CmdArmRotation(Quaternion.Euler(0f, 0f, -rotZ + 90));
 
         Debug.DrawLine(armTransform.position, Camera.main.ScreenToWorldPoint(mousePosition));
 
@@ -136,12 +136,10 @@ public class Player : MonoBehaviour
             if (!gbullet.GetComponent<Bullet>())
                 gbullet.AddComponent<Bullet>();
 
-
             //Give it a direction
             gbullet.GetComponent<Bullet>().Direction = bulletdirection;
             //Have the bullet point in the direction it is shooting 
             gbullet.transform.rotation = Quaternion.Euler(0f,0f,rotZ);
-            
         }
     }
 
@@ -155,22 +153,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Flip()
+    private Vector3 Flip()
     {
         facingRight = !facingRight;
         Vector3 theScale = bodyTransform.localScale;
         theScale.x *= -1;
-        bodyTransform.localScale = theScale;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<Bullet>())
-        {
-            health -= other.GetComponent<Bullet>().Damage;
-            if(health <= 0)
-                Destroy(gameObject);
-        }
-            
+        return bodyTransform.localScale = theScale;
     }
 }

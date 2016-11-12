@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class Bullet : MonoBehaviour
+public class Bullet : NetworkBehaviour
 {
     private float speed;
     private Vector3 direction;
