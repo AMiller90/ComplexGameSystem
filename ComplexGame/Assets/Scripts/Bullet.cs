@@ -42,7 +42,7 @@ public class Bullet : NetworkBehaviour
         if (!isServer)
             return;
 
-        Player p = other.gameObject.GetComponent<Player>();
+        NetworkPlayer p = other.gameObject.GetComponent<NetworkPlayer>();
 
         if (p)
         {

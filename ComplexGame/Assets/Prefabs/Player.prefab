@@ -61,7 +61,6 @@ GameObject:
   - 114: {fileID: 114000010504612916}
   - 114: {fileID: 114000011047185122}
   - 114: {fileID: 114000010023491594}
-  - 114: {fileID: 114000013645112674}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -466,23 +465,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f64d9a9c65d07e64592b5822272aa19a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodyTransform: {fileID: 4000014236242474}
-  anim: {fileID: 95000013262350132}
-  bullet: {fileID: 1000013294211762, guid: abfa22956bdf0fd418753c5ce20e3670, type: 2}
---- !u!114 &114000013645112674
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011504191856}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dc12758010e0764492ddfbf7ae751ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   bullet: {fileID: 1000013294211762, guid: abfa22956bdf0fd418753c5ce20e3670, type: 2}
   armTransform: {fileID: 4000010982850714}
+  bodyTransform: {fileID: 4000014004567344}
   firePointTransform: {fileID: 4000014279794598}
+  anim: {fileID: 95000013262350132}
 --- !u!212 &212000011241774158
 SpriteRenderer:
   m_ObjectHideFlags: 1

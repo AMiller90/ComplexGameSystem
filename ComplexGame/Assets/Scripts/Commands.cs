@@ -2,7 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class SetUpLocalPlayer : NetworkBehaviour
+public class Commands : NetworkBehaviour
 {
     [SyncVar]
     private Quaternion syncarmRotation;
@@ -18,22 +18,8 @@ public class SetUpLocalPlayer : NetworkBehaviour
     [SyncVar]
     private float pmaxhealth = 100;
 
-    void OnGUI()
-    {
-        if (isLocalPlayer)
-        {
-            GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
-            pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), pname);
-            this.GetComponentsInChildren<TextMesh>()[0].text = pname;
-            if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
-            {
-                CmdChangeName(pname);
-            }
-        }
-    }
-
     [Command]
-    public void CmdChangeName(string newName)
+    private void CmdChangeName(string newName)
     {
         pname = newName;
     }
@@ -60,6 +46,22 @@ public class SetUpLocalPlayer : NetworkBehaviour
     public void CmdSpawnBullet(GameObject bull)
     {
         NetworkServer.Spawn(bull);
+    }
+
+    [Command]
+    public void CmdShoot(Vector3 bulletDirection)
+    {
+        //Instantiate a bullet
+        GameObject gbullet = Instantiate(GetComponent<NetworkPlayer>().Bullet, GetComponentsInChildren<Transform>()[4].position, GetComponentsInChildren<Transform>()[4].rotation) as GameObject;
+
+        //Add the bullet component if it doesnt have one
+        if (!gbullet.GetComponent<Bullet>())
+            gbullet.AddComponent<Bullet>();
+
+        //Give it a direction
+        gbullet.GetComponent<Bullet>().Direction = bulletDirection;
+
+        NetworkServer.Spawn(gbullet);
     }
 
     // Use this for initialization
@@ -89,9 +91,17 @@ public class SetUpLocalPlayer : NetworkBehaviour
        
     }
 
-    public override void PreStartClient()
+    void OnGUI()
     {
-        GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
+        if (isLocalPlayer)
+        {
+            GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
+            pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), pname);
+            this.GetComponentsInChildren<TextMesh>()[0].text = pname;
+            if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
+            {
+                CmdChangeName(pname);
+            }
+        }
     }
-
 }
