@@ -5,10 +5,10 @@ using UnityEngine.Networking;
 public class Player : NetworkBehaviour
 {
     private bool facingRight;
-    [SerializeField]
-    private GameObject bullet;
-    [SerializeField]
-    private Transform armTransform;
+    //[SerializeField]
+    //private GameObject bullet;
+    //[SerializeField]
+    //private Transform armTransform;
     [SerializeField]
     private Transform bodyTransform;
     [SerializeField]
@@ -48,8 +48,8 @@ public class Player : NetworkBehaviour
         if (playerBody == null)
             playerBody = GetComponent<Rigidbody>();
 
-        if (armTransform == null)
-            armTransform = GetComponentsInChildren<Transform>()[2];
+        //if (armTransform == null)
+        //    armTransform = GetComponentsInChildren<Transform>()[2];
 
         if (bodyTransform == null)
             bodyTransform = GetComponentsInChildren<Transform>()[1];
@@ -61,30 +61,40 @@ public class Player : NetworkBehaviour
             anim = GetComponent<Animator>();
     }
 
-	// Use this for initialization
-	void Start ()
-	{
-	    maxHealth = 100;
-	    health = maxHealth;
+    // Use this for initialization
+    void Start()
+    {
+        maxHealth = 100;
+        health = maxHealth;
 
         speed = 0;
         canJump = true;
     }
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	    if (!isLocalPlayer)
-	        return;
 
-	    if (gameObject == null)
-	        return;
-
+    // Update is called once per frame
+    void Update()
+    {
+        if (!isLocalPlayer)
+            return;
+ 
         Move();
-	    Jump();
-	    Shoot();
-	}
+        Jump();
+        if (Input.GetKeyDown(KeyCode.F))
+            CmdShoot(); 
+    }
 
+
+    [Command]
+    void CmdShoot()
+    {
+        
+        var b = Instantiate(bullet, firePointTransform.position, Quaternion.identity) as GameObject;
+        b.GetComponent<Rigidbody>().AddForce(transform.right * 115.0f);
+        NetworkServer.Spawn(b);
+        
+    }
+
+    public GameObject bullet;
     private void Move()
     {
         anim.SetFloat("Speed", 0);
@@ -99,13 +109,14 @@ public class Player : NetworkBehaviour
         {
             GetComponent<SetUpLocalPlayer>().CmdFlipBody(Flip());
         }
+
         //Move to the left
         if (Input.GetKey(KeyCode.A))
         {
             anim.SetFloat("Speed", 5);
             transform.position += Vector3.left * 5 * Time.deltaTime;
         }
-            
+
         //Move to the right
         if (Input.GetKey(KeyCode.D))
         {
@@ -114,52 +125,53 @@ public class Player : NetworkBehaviour
         }
     }
 
-    private void Shoot()
-    {
-        //Get mouse position
-        Vector3 mousePosition = Input.mousePosition;
-        //Set the z position to offset with the camera
-        mousePosition.z = Camera.main.transform.position.z * -1;
 
-        //Get the displacement between mouse an muzzle position
-        Vector3 displacement = Camera.main.ScreenToWorldPoint(mousePosition) - armTransform.position;
-        //Get the direction
-        Vector3 bulletdirection = displacement.normalized;
+    //private void Shoot()
+    //{
+    //    //Get mouse position
+    //    Vector3 mousePosition = Input.mousePosition;
+    //    //Set the z position to offset with the camera
+    //    mousePosition.z = Camera.main.transform.position.z * -1;
 
-        //Calculate the rotation on Z
-        float rotZ = Mathf.Atan2(bulletdirection.x, bulletdirection.y)*Mathf.Rad2Deg;
+    //    //Get the displacement between mouse an muzzle position
+    //    Vector3 displacement = Camera.main.ScreenToWorldPoint(mousePosition) - armTransform.position;
+    //    //Get the direction
+    //    Vector3 bulletdirection = displacement.normalized;
 
-        //Rotate the z axis as the mouse moves
-        armTransform.rotation = Quaternion.Euler(0f, 0f, -rotZ + 90);
-        GetComponent<SetUpLocalPlayer>().CmdArmRotation(Quaternion.Euler(0f, 0f, -rotZ + 90));
+    //    //Calculate the rotation on Z
+    //    float rotZ = Mathf.Atan2(bulletdirection.x, bulletdirection.y)*Mathf.Rad2Deg;
 
-        Debug.DrawLine(armTransform.position, Camera.main.ScreenToWorldPoint(mousePosition));
+    //    //Rotate the z axis as the mouse moves
+    //    armTransform.rotation = Quaternion.Euler(0f, 0f, -rotZ + 90);
+    //    GetComponent<SetUpLocalPlayer>().CmdArmRotation(Quaternion.Euler(0f, 0f, -rotZ + 90));
 
-        //If left click
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {//Instantiate a bullet
-            GameObject gbullet = Instantiate(bullet, firePointTransform.position, firePointTransform.rotation) as GameObject;
+    //    Debug.DrawLine(armTransform.position, Camera.main.ScreenToWorldPoint(mousePosition));
 
-            //Add the bullet component if it doesnt have one
-            if (!gbullet.GetComponent<Bullet>())
-                gbullet.AddComponent<Bullet>();
+    //    //If left click
+    //    if (Input.GetKeyDown(KeyCode.Mouse0))
+    //    {//Instantiate a bullet
+    //        GameObject gbullet = Instantiate(bullet, firePointTransform.position, firePointTransform.rotation) as GameObject;
 
-            //Give it a direction
-            gbullet.GetComponent<Bullet>().Direction = bulletdirection;
-            //Have the bullet point in the direction it is shooting 
-            gbullet.transform.rotation = Quaternion.Euler(0f,0f,rotZ);
+    //        //Add the bullet component if it doesnt have one
+    //        if (!gbullet.GetComponent<Bullet>())
+    //            gbullet.AddComponent<Bullet>();
 
-            GetComponent<SetUpLocalPlayer>().CmdSpawnBullet(gbullet);
-        }
-    }
+    //        //Give it a direction
+    //        gbullet.GetComponent<Bullet>().Direction = bulletdirection;
+    //        //Have the bullet point in the direction it is shooting 
+    //        gbullet.transform.rotation = Quaternion.Euler(0f,0f,rotZ);
+
+    //        GetComponent<SetUpLocalPlayer>().CmdSpawnBullet(gbullet);
+    //    }
+    //}
 
     private void Jump()
     {
         anim.SetBool("IsGrounded", canJump);
         if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
-           canJump = false;
-           playerBody.velocity = new Vector3(playerBody.velocity.x, 10, 0);
+            canJump = false;
+            playerBody.velocity = new Vector3(playerBody.velocity.x, 10, 0);
         }
     }
 
@@ -173,10 +185,13 @@ public class Player : NetworkBehaviour
 
     public void TakeDamage(float amount)
     {
+        if (!isServer)
+            return;
+
         health -= amount;
         GetComponent<SetUpLocalPlayer>().CmdHealthUpdate(health);
 
-        if(health <= 0)
+        if (health <= 0)
             Destroy(gameObject);
     }
 }

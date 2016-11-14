@@ -32,14 +32,16 @@ public class Bullet : NetworkBehaviour
         speed = 10;
     }
 
-	// Update is called once per frame
 	void Update ()
 	{
-	    transform.position += direction * (Time.deltaTime *speed);
+        transform.position += direction * (Time.deltaTime *speed);
 	}
 
     void OnTriggerEnter(Collider other)
     {
+        if (!isServer)
+            return;
+
         Player p = other.gameObject.GetComponent<Player>();
 
         if (p)

@@ -8,7 +8,7 @@ public class SetUpLocalPlayer : NetworkBehaviour
     private Quaternion syncarmRotation;
 
     [SyncVar]
-    private Vector3 flipVector;
+    private Vector3 flipVector = new Vector3(1, 1, 1);
 
     [SyncVar]
     private string pname = "player";
@@ -62,11 +62,6 @@ public class SetUpLocalPlayer : NetworkBehaviour
         NetworkServer.Spawn(bull);
     }
 
-    void Awake()
-    {
-        flipVector = new Vector3(1, 1, 1);
-    }
-
     // Use this for initialization
     void Start()
     {
@@ -98,18 +93,5 @@ public class SetUpLocalPlayer : NetworkBehaviour
     {
         GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
     }
-
-    //void OnTriggerEnter(Collider other)
-    //{
-    //    if (!GetComponent<Player>().enabled && other.GetComponent<Bullet>())
-    //    {
-    //        Debug.Log("Someone else shot you!");
-    //        //health -= other.GetComponent<Bullet>().Damage;
-    //        //GetComponent<SetUpLocalPlayer>().CmdHealthUpdate(health);
-    //        ////////if(health <= 0)
-    //        ////////    Destroy(gameObject);
-    //    }
-
-    //}
 
 }
