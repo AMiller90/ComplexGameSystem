@@ -8,9 +8,4 @@ public class Platform : MonoBehaviour {
         if (other.gameObject.GetComponent<Player>())
             other.gameObject.GetComponent<Player>().CanJump = true;
     }
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.GetComponent<Bullet>())
-            Destroy(other.gameObject);
-    }
 }

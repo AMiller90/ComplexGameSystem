@@ -37,4 +37,16 @@ public class Bullet : NetworkBehaviour
 	{
 	    transform.position += direction * (Time.deltaTime *speed);
 	}
+
+    void OnTriggerEnter(Collider other)
+    {
+        Player p = other.gameObject.GetComponent<Player>();
+
+        if (p)
+        {
+            p.TakeDamage(damage);
+        }
+
+        Destroy(gameObject);
+    }
 }

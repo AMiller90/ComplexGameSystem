@@ -24,6 +24,7 @@ public class SetUpLocalPlayer : NetworkBehaviour
         {
             GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
             pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), pname);
+            this.GetComponentsInChildren<TextMesh>()[0].text = pname;
             if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
             {
                 CmdChangeName(pname);
@@ -55,16 +56,22 @@ public class SetUpLocalPlayer : NetworkBehaviour
         flipVector = flip;
     }
 
+    [Command]
+    public void CmdSpawnBullet(GameObject bull)
+    {
+        NetworkServer.Spawn(bull);
+    }
+
     void Awake()
     {
         flipVector = new Vector3(1, 1, 1);
     }
+
     // Use this for initialization
     void Start()
     {
         if (isLocalPlayer)
         {
-            GetComponent<Player>().enabled = true;
             GetComponent<NetworkAnimator>().SetParameterAutoSend(0,true);
             syncarmRotation = Quaternion.identity;
         }
@@ -73,12 +80,18 @@ public class SetUpLocalPlayer : NetworkBehaviour
 
     void Update()
     {
+        if (gameObject == null)
+            return;
+
         this.GetComponentsInChildren<TextMesh>()[0].text = pname;
         this.GetComponentsInChildren<TextMesh>()[1].text = phealth + "/" + pmaxhealth;
-        this.GetComponentsInChildren<Transform>()[1].localScale = flipVector;
 
         if (!isLocalPlayer)
+        {
+            this.GetComponentsInChildren<Transform>()[1].localScale = flipVector;
             this.GetComponentsInChildren<Transform>()[2].rotation = syncarmRotation;
+        }
+       
     }
 
     public override void PreStartClient()

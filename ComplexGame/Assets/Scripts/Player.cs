@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     private bool facingRight;
     [SerializeField]
@@ -65,13 +66,20 @@ public class Player : MonoBehaviour
 	{
 	    maxHealth = 100;
 	    health = maxHealth;
-	    speed = 0;
+
+        speed = 0;
         canJump = true;
     }
 	
 	// Update is called once per frame
 	void Update ()
-	{ 
+	{
+	    if (!isLocalPlayer)
+	        return;
+
+	    if (gameObject == null)
+	        return;
+
         Move();
 	    Jump();
 	    Shoot();
@@ -140,6 +148,8 @@ public class Player : MonoBehaviour
             gbullet.GetComponent<Bullet>().Direction = bulletdirection;
             //Have the bullet point in the direction it is shooting 
             gbullet.transform.rotation = Quaternion.Euler(0f,0f,rotZ);
+
+            GetComponent<SetUpLocalPlayer>().CmdSpawnBullet(gbullet);
         }
     }
 
@@ -159,5 +169,14 @@ public class Player : MonoBehaviour
         Vector3 theScale = bodyTransform.localScale;
         theScale.x *= -1;
         return bodyTransform.localScale = theScale;
+    }
+
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+        GetComponent<SetUpLocalPlayer>().CmdHealthUpdate(health);
+
+        if(health <= 0)
+            Destroy(gameObject);
     }
 }
