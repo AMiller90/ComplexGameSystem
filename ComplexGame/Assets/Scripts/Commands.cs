@@ -1,9 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Collections;
+using System;
+
+//public class SyncListPlayers : SyncList<GameObject>
+//{
+//    protected override void SerializeItem(NetworkWriter writer, GameObject item)
+//    {
+//        writer.Write(item);
+//    }
+
+//    protected override GameObject DeserializeItem(NetworkReader reader)
+//    {
+//        return reader.ReadGameObject();
+//    }
+//}
 
 public class Commands : NetworkBehaviour
 {
+    //public SyncListPlayers playersInGame = new SyncListPlayers();
+
     [SyncVar]
     private Quaternion syncarmRotation;
 
@@ -15,11 +32,12 @@ public class Commands : NetworkBehaviour
 
     [SyncVar]
     private float phealth = 100;
+
     [SyncVar]
     private float pmaxhealth = 100;
 
     [Command]
-    private void CmdChangeName(string newName)
+    public void CmdChangeName(string newName)
     {
         pname = newName;
     }
@@ -64,15 +82,18 @@ public class Commands : NetworkBehaviour
         NetworkServer.Spawn(gbullet);
     }
 
-    // Use this for initialization
     void Start()
     {
+        //playersInGame.Add(gameObject);
+        //CmdPlayerCount(playersInGame.Count);
+
+        NetworkGameManager.AddToList(gameObject.GetComponent<NetworkPlayer>());
+
         if (isLocalPlayer)
         {
             GetComponent<NetworkAnimator>().SetParameterAutoSend(0,true);
             syncarmRotation = Quaternion.identity;
         }
-           
     }
 
     void Update()

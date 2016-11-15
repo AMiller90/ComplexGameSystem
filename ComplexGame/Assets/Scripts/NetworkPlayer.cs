@@ -160,6 +160,11 @@ public class NetworkPlayer : NetworkBehaviour
         GetComponent<Commands>().CmdHealthUpdate(health);
 
         if (health <= 0)
+        {
+            NetworkGameManager.RemoveAndCheckForWin(this);
+            
             Destroy(gameObject);
+        }
+            
     }
 }

@@ -7,8 +7,7 @@ public class NetworkSpawner : MonoBehaviour
     [SerializeField]
     private List<Transform> spawnpoints;
 
-    // Use this for initialization
-    void Start ()
+    void Awake()
     {
         spawnpoints = new List<Transform>();
 
