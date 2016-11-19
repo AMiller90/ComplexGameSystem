@@ -28,7 +28,7 @@ public class Commands : NetworkBehaviour
     private Vector3 flipVector = new Vector3(1, 1, 1);
 
     [SyncVar]
-    private string pname = "player";
+    private string pname = "Player";
 
     [SyncVar]
     private float phealth = 100;
@@ -40,6 +40,7 @@ public class Commands : NetworkBehaviour
     public void CmdChangeName(string newName)
     {
         pname = newName;
+
     }
 
     [Command]

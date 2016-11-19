@@ -451,10 +451,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000011504191856}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63cb8787636ef864eb952f93e72eb6ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ac70a16f193f9a4694956a2e8a2d4b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberText: {fileID: 0}
+  pname: player
 --- !u!114 &114000011899937074
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -463,7 +463,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000011504191856}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f64d9a9c65d07e64592b5822272aa19a, type: 3}
+  m_Script: {fileID: 11500000, guid: b8a9fefee4e82f04595f34c4a5922af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 1000013294211762, guid: abfa22956bdf0fd418753c5ce20e3670, type: 2}

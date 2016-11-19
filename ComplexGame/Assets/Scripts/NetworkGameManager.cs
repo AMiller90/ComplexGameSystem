@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class NetworkGameManager
 {
@@ -17,7 +18,7 @@ public class NetworkGameManager
         if (players.Count == 1)
         {
             string name = players[0].GetComponentsInChildren<TextMesh>()[0].text;
-            players[0].GetComponent<Commands>().CmdChangeName(name +" Wins!");
+            players[0].GetComponent<Commands>().CmdChangeName(name + " Wins!");
             return true;
         }
         return false;
