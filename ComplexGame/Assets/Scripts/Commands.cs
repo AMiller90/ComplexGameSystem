@@ -28,7 +28,7 @@ public class Commands : NetworkBehaviour
     private Vector3 flipVector = new Vector3(1, 1, 1);
 
     [SyncVar]
-    private string pname = "Player";
+    public string pname;
 
     [SyncVar]
     private float phealth = 100;
@@ -95,6 +95,8 @@ public class Commands : NetworkBehaviour
             GetComponent<NetworkAnimator>().SetParameterAutoSend(0,true);
             syncarmRotation = Quaternion.identity;
         }
+
+        this.GetComponentsInChildren<TextMesh>()[0].text = pname;
     }
 
     void Update()
@@ -102,7 +104,7 @@ public class Commands : NetworkBehaviour
         if (gameObject == null)
             return;
 
-        this.GetComponentsInChildren<TextMesh>()[0].text = pname;
+        
         this.GetComponentsInChildren<TextMesh>()[1].text = phealth + "/" + pmaxhealth;
 
         if (!isLocalPlayer)
@@ -113,17 +115,17 @@ public class Commands : NetworkBehaviour
        
     }
 
-    void OnGUI()
-    {
-        if (isLocalPlayer)
-        {
-            GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
-            pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), pname);
-            this.GetComponentsInChildren<TextMesh>()[0].text = pname;
-            if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
-            {
-                CmdChangeName(pname);
-            }
-        }
-    }
+    //void OnGUI()
+    //{
+    //    if (isLocalPlayer)
+    //    {
+    //        GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
+    //        pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), pname);
+    //        this.GetComponentsInChildren<TextMesh>()[0].text = pname;
+    //        if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
+    //        {
+    //            CmdChangeName(pname);
+    //        }
+    //    }
+    //}
 }
