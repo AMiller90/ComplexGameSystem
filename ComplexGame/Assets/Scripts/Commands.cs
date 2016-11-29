@@ -88,7 +88,8 @@ public class Commands : NetworkBehaviour
         //playersInGame.Add(gameObject);
         //CmdPlayerCount(playersInGame.Count);
 
-        NetworkGameManager.AddToList(gameObject.GetComponent<NetworkPlayer>());
+        if (isServer)
+            NetworkGameManager.AddToList(gameObject.GetComponent<NetworkPlayer>());
 
         if (isLocalPlayer)
         {

@@ -156,15 +156,16 @@ public class NetworkPlayer : NetworkBehaviour
         if (!isServer)
             return;
 
+        if (NetworkGameManager.PlayersGetCount() == 1)
+            return;
+
         health -= amount;
         GetComponent<Commands>().CmdHealthUpdate(health);
 
         if (health <= 0)
         {
             if (NetworkGameManager.RemoveAndCheckForWin(this))
-                //BackToLobby();
-
-            Destroy(gameObject);
+                Invoke("BackToLobby", 3.0f);
         }
             
     }
