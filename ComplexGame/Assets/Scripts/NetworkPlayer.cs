@@ -71,7 +71,7 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (!isLocalPlayer)
             return;
- 
+
         Move();
         Jump();
         Vector3 dir = Aim();
@@ -161,10 +161,16 @@ public class NetworkPlayer : NetworkBehaviour
 
         if (health <= 0)
         {
-            NetworkGameManager.RemoveAndCheckForWin(this);
-            
+            if (NetworkGameManager.RemoveAndCheckForWin(this))
+                //BackToLobby();
+
             Destroy(gameObject);
         }
             
+    }
+
+    void BackToLobby()
+    {
+        FindObjectOfType<NetworkLobbyManager>().ServerReturnToLobby();
     }
 }

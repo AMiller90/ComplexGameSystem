@@ -104,9 +104,9 @@ public class Commands : NetworkBehaviour
         if (gameObject == null)
             return;
 
-        
+        this.GetComponentsInChildren<TextMesh>()[0].text = pname;
         this.GetComponentsInChildren<TextMesh>()[1].text = phealth + "/" + pmaxhealth;
-
+        
         if (!isLocalPlayer)
         {
             this.GetComponentsInChildren<Transform>()[1].localScale = flipVector;

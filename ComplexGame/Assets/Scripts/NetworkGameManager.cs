@@ -15,6 +15,7 @@ public class NetworkGameManager
     {
         players.Remove(player);
 
+        
         if (players.Count == 1)
         {
             string name = players[0].GetComponentsInChildren<TextMesh>()[0].text;
