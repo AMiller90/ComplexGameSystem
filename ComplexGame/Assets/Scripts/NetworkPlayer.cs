@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
 
 public class NetworkPlayer : NetworkBehaviour
 {
@@ -165,9 +166,21 @@ public class NetworkPlayer : NetworkBehaviour
         if (health <= 0)
         {
             if (NetworkGameManager.RemoveAndCheckForWin(this))
-                Invoke("BackToLobby", 3.0f);
+            {
+                StartCoroutine(GoToLobby());
+            }
         }
             
+    }
+
+    IEnumerator GoToLobby()
+    {
+        NetworkManager networkManager = NetworkManager.singleton;
+        MatchInfo matchInfo = networkManager.matchInfo;
+        yield return new WaitForSeconds(3);
+
+        networkManager.matchMaker.DropConnection(matchInfo.networkId, matchInfo.nodeId, 0, networkManager.OnDropConnection);
+        networkManager.StopHost();
     }
 
     void BackToLobby()

@@ -124,7 +124,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Room Name (2/4)
+  m_Text: 
 --- !u!114 &114000010696075762
 MonoBehaviour:
   m_ObjectHideFlags: 1

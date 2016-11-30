@@ -6,7 +6,7 @@ public class HostGame : MonoBehaviour{
 
     private uint roomSize = 4;
 
-    private string roomName = "";
+    private string roomName;
 
     private NetworkManager networkManager;
 
