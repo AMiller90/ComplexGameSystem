@@ -116,17 +116,17 @@ public class Commands : NetworkBehaviour
        
     }
 
-    //void OnGUI()
-    //{
-    //    if (isLocalPlayer)
-    //    {
-    //        GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
-    //        pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), pname);
-    //        this.GetComponentsInChildren<TextMesh>()[0].text = pname;
-    //        if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
-    //        {
-    //            CmdChangeName(pname);
-    //        }
-    //    }
-    //}
+    void OnGUI()
+    {
+        if (isLocalPlayer)
+        {
+            GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
+            pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), pname);
+            this.GetComponentsInChildren<TextMesh>()[0].text = pname;
+            if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
+            {
+                CmdChangeName(pname);
+            }
+        }
+    }
 }
