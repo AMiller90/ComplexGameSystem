@@ -69,7 +69,7 @@ public class NetworkPlayer : NetworkBehaviour
 
     void Update()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer || PauseMenu.isOn)
             return;
 
         Move();
@@ -77,7 +77,7 @@ public class NetworkPlayer : NetworkBehaviour
         Vector3 dir = Aim();
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
-            GetComponent<Commands>().CmdShoot(dir); 
+            GetComponent<Commands>().CmdShoot(dir);
     }
 
     private void Move()

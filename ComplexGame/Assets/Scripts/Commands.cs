@@ -102,7 +102,7 @@ public class Commands : NetworkBehaviour
 
     void Update()
     {
-        if (gameObject == null)
+        if (gameObject == null || PauseMenu.isOn)
             return;
 
         this.GetComponentsInChildren<TextMesh>()[0].text = pname;
