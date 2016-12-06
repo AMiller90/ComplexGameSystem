@@ -1,54 +1,92 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
-using System.Collections;
-
-public class Bullet : NetworkBehaviour
+﻿
+namespace Assets.Scripts
 {
-    private float speed;
-    private Vector3 direction;
-    private float damage;
+    using UnityEngine;
+    using UnityEngine.Networking;
 
-    public float Speed
+    /// <summary>
+    /// The bullet class.
+    /// </summary>
+    public class Bullet : NetworkBehaviour
     {
-        get { return speed; }
-        set { speed = value; }
-    }
+        /// <summary>
+        /// The speed.
+        /// </summary>
+        private float speed;
 
-    public Vector3 Direction
-    {
-        get { return direction; }
-        set { direction = value; }
-    }
+        /// <summary>
+        /// The direction.
+        /// </summary>
+        private Vector3 direction;
 
-    public float Damage
-    {
-        get { return damage; }
-        set { damage = value; }
-    }
+        /// <summary>
+        /// The damage.
+        /// </summary>
+        private float damage;
 
-    void Start()
-    {
-        damage = 5;
-        speed = 10;
-    }
-
-	void Update ()
-	{
-        transform.position += direction * (Time.deltaTime *speed);
-	}
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (!isServer)
-            return;
-
-        NetworkPlayer p = other.gameObject.GetComponent<NetworkPlayer>();
-
-        if (p)
+        /// <summary>
+        /// Gets or sets the speed.
+        /// </summary>
+        public float Speed
         {
-            p.TakeDamage(damage);
+            get { return this.speed; }
+            set { this.speed = value; }
         }
 
-        Destroy(gameObject);
+        /// <summary>
+        /// Gets or sets the direction.
+        /// </summary>
+        public Vector3 Direction
+        {
+            get { return this.direction; }
+            set { this.direction = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the damage.
+        /// </summary>
+        public float Damage
+        {
+            get { return this.damage; }
+            set { this.damage = value; }
+        }
+
+        /// <summary>
+        /// The start function.
+        /// </summary>
+        private void Start()
+        {
+            this.damage = 5;
+            this.speed = 10;
+        }
+
+        /// <summary>
+        /// The update function.
+        /// </summary>
+        private void Update()
+        {
+            this.transform.position += this.direction * (Time.deltaTime *this.speed);
+        }
+
+        /// <summary>
+        /// The on trigger enter function.
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!this.isServer)
+                return;
+
+            NetworkPlayer p = other.gameObject.GetComponent<NetworkPlayer>();
+
+            if (p)
+            {
+                p.TakeDamage(this.damage);
+            }
+
+            Destroy(this.gameObject);
+        }
     }
 }

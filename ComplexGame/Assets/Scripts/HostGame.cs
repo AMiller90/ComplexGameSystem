@@ -1,37 +1,62 @@
-﻿using System;
+﻿
+namespace Assets.Scripts
+{
+    using UnityEngine;
+    using UnityEngine.Networking;
 
-using UnityEngine;
-using UnityEngine.Networking;
-using System.Collections;
-
-public class HostGame : MonoBehaviour{
-
-    private uint roomSize = 4;
-
-    private string roomName = string.Empty;
-
-    private NetworkManager networkManager;
-
-    void Start()
+    /// <summary>
+    /// The host game function.
+    /// </summary>
+    public class HostGame : MonoBehaviour
     {
-        networkManager = NetworkManager.singleton;
+        /// <summary>
+        /// The room size.
+        /// </summary>
+        private readonly uint roomSize = 4;
 
-        if (networkManager.matchMaker == null)
-            networkManager.StartMatchMaker();
-    }
+        /// <summary>
+        /// The room name.
+        /// </summary>
+        private string roomName = "";
 
-    public void SetRoomName(string name)
-    {
-        roomName = name;
-    } 
+        /// <summary>
+        /// The network manager.
+        /// </summary>
+        private NetworkManager networkManager;
 
-    public void CreateRoom()
-    {
-        if (!string.IsNullOrEmpty(this.roomName))
+        /// <summary>
+        /// The set room name function.
+        /// </summary>
+        /// <param name="aName">
+        /// The name.
+        /// </param>
+        public void SetRoomName(string aName)
         {
-            Debug.Log("Creating a room: " + roomName + " with room for " + roomSize + " players.");
-            networkManager.matchMaker.CreateMatch(roomName, roomSize, true, string.Empty, string.Empty,string.Empty, 0, 0, networkManager.OnMatchCreate);
+            this.roomName = aName;
         }
-            
+
+        /// <summary>
+        /// The create room function.
+        /// </summary>
+        public void CreateRoom()
+        {
+            if (this.roomName != "")
+            {
+                this.networkManager.matchMaker.CreateMatch(this.roomName, this.roomSize, true, string.Empty, string.Empty, string.Empty, 0, 0, this.networkManager.OnMatchCreate);
+            }
+        }
+
+        /// <summary>
+        /// The start function.
+        /// </summary>
+        private void Start()
+        {
+            this.networkManager = NetworkManager.singleton;
+
+            if (this.networkManager.matchMaker == null)
+            {
+                this.networkManager.StartMatchMaker();
+            }
+        }
     }
 }

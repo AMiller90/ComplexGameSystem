@@ -1,31 +1,64 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.UI;
-
-public class NetworkGameManager
+﻿
+namespace Assets.Scripts
 {
-    private static List<NetworkPlayer> players = new List<NetworkPlayer>();
+    using System.Collections.Generic;
 
-    public static void AddToList(NetworkPlayer player)
+    using UnityEngine;
+
+    /// <summary>
+    /// The network game manager.
+    /// </summary>
+    public sealed class NetworkGameManager
     {
-        players.Add(player);
-    }
+        /// <summary>
+        /// The players.
+        /// </summary>
+        private static readonly List<NetworkPlayer> Players = new List<NetworkPlayer>();
 
-    public static bool RemoveAndCheckForWin(NetworkPlayer player)
-    {
-        players.Remove(player);
-
-        if (players.Count == 1)
+        /// <summary>
+        /// The add to list function.
+        /// </summary>
+        /// <param name="player">
+        /// The player.
+        /// </param>
+        public static void AddToList(NetworkPlayer player)
         {
-            string name = players[0].GetComponentsInChildren<TextMesh>()[0].text;
-            players[0].GetComponent<Commands>().CmdChangeName(name + " Wins!");
-            return true;
+            Players.Add(player);
         }
-        return false;
-    }
 
-    public static int PlayersGetCount()
-    {
-        return players.Count;
+        /// <summary>
+        /// The remove and check for win function.
+        /// </summary>
+        /// <param name="player">
+        /// The player.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool RemoveAndCheckForWin(NetworkPlayer player)
+        {
+            player.GetComponent<Commands>().CmdChangeName(player.GetComponentsInChildren<TextMesh>()[0].text + " Loses!");
+            Players.Remove(player);
+
+            if (Players.Count == 1)
+            {
+                string name = Players[0].GetComponentsInChildren<TextMesh>()[0].text;
+                Players[0].GetComponent<Commands>().CmdChangeName(name + " Wins!");
+                Players.Clear();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// The players get count function.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public static int PlayersGetCount()
+        {
+            return Players.Count;
+        }
     }
 }

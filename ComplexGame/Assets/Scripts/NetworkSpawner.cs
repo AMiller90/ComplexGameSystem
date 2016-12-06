@@ -1,24 +1,38 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
-using System.Collections.Generic;
-
-public class NetworkSpawner : MonoBehaviour
+﻿
+namespace Assets.Scripts
 {
-    [SerializeField]
-    private List<Transform> spawnpoints;
+    using System.Collections.Generic;
 
-    void Awake()
+    using UnityEngine;
+    using UnityEngine.Networking;
+
+    /// <summary>
+    /// The network class used for spawn points.
+    /// </summary>
+    public class NetworkSpawner : MonoBehaviour
     {
-        spawnpoints = new List<Transform>();
+        /// <summary>
+        /// The spawn points list.
+        /// </summary>
+        [SerializeField]
+        private List<Transform> spawnpoints;
 
-        for (int i = 1; i < 5; i++)
+        /// <summary>
+        /// The awake.
+        /// </summary>
+        private void Awake()
         {
-            spawnpoints.Add(gameObject.GetComponentsInChildren<Transform>()[i]);
-        }
+            this.spawnpoints = new List<Transform>();
 
-        foreach (Transform t in spawnpoints)
-        {
-            t.gameObject.gameObject.AddComponent<NetworkStartPosition>();
+            for (int i = 1; i < 5; i++)
+            {
+                this.spawnpoints.Add(this.gameObject.GetComponentsInChildren<Transform>()[i]);
+            }
+
+            foreach (Transform t in this.spawnpoints)
+            {
+                t.gameObject.gameObject.AddComponent<NetworkStartPosition>();
+            }
         }
     }
 }

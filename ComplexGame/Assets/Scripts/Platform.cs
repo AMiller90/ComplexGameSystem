@@ -1,11 +1,25 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿
+namespace Assets.Scripts
+{
+    using UnityEngine;
 
-public class Platform : MonoBehaviour {
-
-    void OnCollisionEnter(Collision other)
+    /// <summary>
+    /// The platform.
+    /// </summary>
+    public class Platform : MonoBehaviour
     {
-        if (other.gameObject.GetComponent<NetworkPlayer>())
-            other.gameObject.GetComponent<NetworkPlayer>().JumpProp = true;
+        /// <summary>
+        /// The on collision enter function.
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        private void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.GetComponent<NetworkPlayer>())
+            {
+                other.gameObject.GetComponent<NetworkPlayer>().JumpProp = true;
+            }
+        }
     }
 }

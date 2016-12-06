@@ -1,190 +1,294 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.Networking;
-using UnityEngine.Networking.Match;
-
-public class NetworkPlayer : NetworkBehaviour
+﻿
+namespace Assets.Scripts
 {
-    private bool facingRight;
-    [SerializeField]
-    private GameObject bullet;
-    [SerializeField]
-    private Transform armTransform;
-    [SerializeField]
-    private Transform bodyTransform;
-    [SerializeField]
-    private Transform firePointTransform;
+    using System.Collections;
 
+    using UnityEngine;
+    using UnityEngine.Networking;
+    using UnityEngine.Networking.Match;
 
-    [SerializeField]
-    private Animator anim;
-
-    private bool canJump;
-
-    public bool JumpProp
+    /// <summary>
+    /// The network player.
+    /// </summary>
+    public class NetworkPlayer : NetworkBehaviour
     {
-        get { return canJump; }
-        set { canJump = value; }
-    }
+        /// <summary>
+        /// The facing right.
+        /// </summary>
+        private bool facingRight;
 
-    private float health;
-    private float maxHealth;
+        /// <summary>
+        /// The bullet.
+        /// </summary>
+        [SerializeField]
+        private GameObject bullet;
 
-    public float Health
-    {
-        get { return health; }
-        set { health = value; }
-    }
+        /// <summary>
+        /// The arm transform.
+        /// </summary>
+        [SerializeField]
+        private Transform armTransform;
 
-    public float MaxHealth
-    {
-        get { return maxHealth; }
-    }
+        /// <summary>
+        /// The body transform.
+        /// </summary>
+        [SerializeField]
+        private Transform bodyTransform;
 
-    public GameObject Bullet
-    {
-        get { return bullet; }
-    }
+        /// <summary>
+        /// The fire point transform.
+        /// </summary>
+        [SerializeField]
+        private Transform firePointTransform;
 
-    void Awake()
-    {
-        if (armTransform == null)
-            armTransform = GetComponentsInChildren<Transform>()[2];
+        /// <summary>
+        /// The animator.
+        /// </summary>
+        [SerializeField]
+        private Animator anim;
 
-        if (bodyTransform == null)
-            bodyTransform = GetComponentsInChildren<Transform>()[1];
+        /// <summary>
+        /// The can jump.
+        /// </summary>
+        private bool canJump;
 
-        if (firePointTransform == null)
-            firePointTransform = GetComponentsInChildren<Transform>()[4];
+        /// <summary>
+        /// The health.
+        /// </summary>
+        private float health;
 
-        if (anim == null)
-            anim = GetComponent<Animator>();
-    }
-
-    void Start()
-    {
-        maxHealth = 100;
-        health = maxHealth;
-        canJump = true;
-    }
-
-    void Update()
-    {
-        if (!isLocalPlayer || PauseMenu.isOn)
-            return;
-
-        Move();
-        Jump();
-        Vector3 dir = Aim();
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-            GetComponent<Commands>().CmdShoot(dir);
-    }
-
-    private void Move()
-    {
-        anim.SetFloat("Speed", 0);
+        /// <summary>
+        /// The max health.
+        /// </summary>
+        private float maxHealth;
 
 
-        if (Input.GetKeyDown(KeyCode.A) && !facingRight)
+        /// <summary>
+        /// Gets or sets a value indicating whether jump prop.
+        /// </summary>
+        public bool JumpProp
         {
-            GetComponent<Commands>().CmdFlipBody(Flip());
+            get { return this.canJump; }
+            set { this.canJump = value; }
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && facingRight)
+        /// <summary>
+        /// Gets or sets the health.
+        /// </summary>
+        public float Health
         {
-            GetComponent<Commands>().CmdFlipBody(Flip());
+            get { return this.health; }
+            set { this.health = value; }
         }
 
-        //Move to the left
-        if (Input.GetKey(KeyCode.A))
+        /// <summary>
+        /// Gets the max health.
+        /// </summary>
+        public float MaxHealth
         {
-            anim.SetFloat("Speed", 5);
-            transform.position += Vector3.left * 5 * Time.deltaTime;
+            get { return this.maxHealth; }
         }
 
-        //Move to the right
-        if (Input.GetKey(KeyCode.D))
+        /// <summary>
+        /// Gets the bullet.
+        /// </summary>
+        public GameObject Bullet
         {
-            anim.SetFloat("Speed", 5);
-            transform.position += Vector3.right * 5 * Time.deltaTime;
+            get { return this.bullet; }
         }
-    }
 
-    private Vector3 Aim()
-    {
-
-        //Get mouse position
-        Vector3 mousePosition = Input.mousePosition;
-        //Set the z position to offset with the camera
-        mousePosition.z = Camera.main.transform.position.z * -1;
-
-        //Get the displacement between mouse an muzzle position
-        Vector3 displacement = Camera.main.ScreenToWorldPoint(mousePosition) - armTransform.position;
-        //Get the direction
-        Vector3 bulletdirection = displacement.normalized;
-
-        //Calculate the rotation on Z
-        float rotZ = Mathf.Atan2(bulletdirection.x, bulletdirection.y) * Mathf.Rad2Deg;
-
-        //Rotate the z axis as the mouse moves
-        armTransform.rotation = Quaternion.Euler(0f, 0f, -rotZ + 90);
-        GetComponent<Commands>().CmdArmRotation(Quaternion.Euler(0f, 0f, -rotZ + 90));
-
-        return bulletdirection;
-    }
-
-    private void Jump()
-    {
-        anim.SetBool("IsGrounded", canJump);
-        if (Input.GetKeyDown(KeyCode.Space) && canJump)
+        /// <summary>
+        /// The take damage.
+        /// </summary>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        public void TakeDamage(float amount)
         {
-            canJump = false;
-            GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, 10, 0);
-        }
-    }
-
-    private Vector3 Flip()
-    {
-        facingRight = !facingRight;
-        Vector3 theScale = bodyTransform.localScale;
-        theScale.x *= -1;
-        return bodyTransform.localScale = theScale;
-    }
-
-    public void TakeDamage(float amount)
-    {
-        if (!isServer)
-            return;
-
-        if (NetworkGameManager.PlayersGetCount() == 1)
-            return;
-
-        health -= amount;
-        GetComponent<Commands>().CmdHealthUpdate(health);
-
-        if (health <= 0)
-        {
-            if (NetworkGameManager.RemoveAndCheckForWin(this))
+            if (!this.isServer || this.health <= 0)
             {
-                StartCoroutine(GoToLobby());
+                return;
+            }
+
+            if (NetworkGameManager.PlayersGetCount() == 1)
+            {
+                return;
+            }
+
+            this.health -= amount;
+            this.GetComponent<Commands>().CmdHealthUpdate(this.health);
+
+            if (this.health <= 0)
+            {
+                this.health = 0;
+
+                if (NetworkGameManager.RemoveAndCheckForWin(this))
+                {
+                    this.StartCoroutine(this.GoToLobby());
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// The awake function.
+        /// </summary>
+        private void Awake()
+        {
+            if (this.armTransform == null)
+            {
+                this.armTransform = this.GetComponentsInChildren<Transform>()[2];
+            }
+
+            if (this.bodyTransform == null)
+            {
+                this.bodyTransform = this.GetComponentsInChildren<Transform>()[1];
+            }
+
+            if (this.firePointTransform == null)
+            {
+                this.firePointTransform = this.GetComponentsInChildren<Transform>()[4];
+            }
+
+            if (this.anim == null)
+            {
+                this.anim = this.GetComponent<Animator>();
             }
         }
+
+        /// <summary>
+        /// The start function.
+        /// </summary>
+        private void Start()
+        {
+            this.maxHealth = 100;
+            this.health = this.maxHealth;
+            this.canJump = true;
+        }
+
+        /// <summary>
+        /// The update function.
+        /// </summary>
+        private void Update()
+        {
+            if (!this.isLocalPlayer || PauseMenu.IsOn)
+            {
+                return;
+            }
+
+            this.Move();
+            this.Jump();
+            Vector3 dir = this.Aim();
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                this.GetComponent<Commands>().CmdShoot(dir);
+            }
+        }
+
+        /// <summary>
+        /// The move function.
+        /// </summary>
+        private void Move()
+        {
+            this.anim.SetFloat("Speed", 0);
+
+
+            if (Input.GetKeyDown(KeyCode.A) && !this.facingRight)
+            {
+                this.GetComponent<Commands>().CmdFlipBody(this.Flip());
+            }
+
+            if (Input.GetKeyDown(KeyCode.D) && this.facingRight)
+            {
+                this.GetComponent<Commands>().CmdFlipBody(this.Flip());
+            }
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                this.anim.SetFloat("Speed", 5);
+                this.transform.position += Vector3.left * 5 * Time.deltaTime;
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                this.anim.SetFloat("Speed", 5);
+                this.transform.position += Vector3.right * 5 * Time.deltaTime;
+            }
+        }
+
+        /// <summary>
+        /// The aim function.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Vector3"/>.
+        /// </returns>
+        private Vector3 Aim()
+        {
+
+            // Get mouse position
+            Vector3 mousePosition = Input.mousePosition;
+
+            // Set the z position to offset with the camera
+            mousePosition.z = Camera.main.transform.position.z * -1;
+
+            // Get the displacement between mouse an muzzle position
+            Vector3 displacement = Camera.main.ScreenToWorldPoint(mousePosition) - this.armTransform.position;
             
-    }
+            // Get the direction
+            Vector3 bulletdirection = displacement.normalized;
 
-    IEnumerator GoToLobby()
-    {
-        NetworkManager networkManager = NetworkManager.singleton;
-        MatchInfo matchInfo = networkManager.matchInfo;
-        yield return new WaitForSeconds(3);
+            // Calculate the rotation on Z
+            float rotZ = Mathf.Atan2(bulletdirection.x, bulletdirection.y) * Mathf.Rad2Deg;
 
-        networkManager.matchMaker.DropConnection(matchInfo.networkId, matchInfo.nodeId, 0, networkManager.OnDropConnection);
-        networkManager.StopHost();
-    }
+            // Rotate the z axis as the mouse moves
+            this.armTransform.rotation = Quaternion.Euler(0f, 0f, -rotZ + 90);
+            this.GetComponent<Commands>().CmdArmRotation(Quaternion.Euler(0f, 0f, -rotZ + 90));
 
-    void BackToLobby()
-    {
-        FindObjectOfType<NetworkLobbyManager>().ServerReturnToLobby();
+            return bulletdirection;
+        }
+
+        /// <summary>
+        /// The jump function.
+        /// </summary>
+        private void Jump()
+        {
+            this.anim.SetBool("IsGrounded", this.canJump);
+            if (Input.GetKeyDown(KeyCode.Space) && this.canJump)
+            {
+                this.canJump = false;
+                this.GetComponent<Rigidbody>().velocity = new Vector3(this.GetComponent<Rigidbody>().velocity.x, 10, 0);
+            }
+        }
+
+        /// <summary>
+        /// The flip function.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Vector3"/>.
+        /// </returns>
+        private Vector3 Flip()
+        {
+            this.facingRight = !this.facingRight;
+            Vector3 theScale = this.bodyTransform.localScale;
+            theScale.x *= -1;
+            return this.bodyTransform.localScale = theScale;
+        }
+
+        /// <summary>
+        /// The go to lobby function.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerator"/>.
+        /// </returns>
+        private IEnumerator GoToLobby()
+        {
+            NetworkManager networkManager = NetworkManager.singleton;
+            MatchInfo matchInfo = networkManager.matchInfo;
+            yield return new WaitForSeconds(3);
+
+            networkManager.matchMaker.DropConnection(matchInfo.networkId, matchInfo.nodeId, 0, networkManager.OnDropConnection);
+            networkManager.StopHost();
+        }
     }
 }
