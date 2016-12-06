@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 
@@ -6,7 +8,7 @@ public class HostGame : MonoBehaviour{
 
     private uint roomSize = 4;
 
-    private string roomName;
+    private string roomName = string.Empty;
 
     private NetworkManager networkManager;
 
@@ -25,10 +27,10 @@ public class HostGame : MonoBehaviour{
 
     public void CreateRoom()
     {
-        if (roomName != "" && roomName != null)
+        if (!string.IsNullOrEmpty(this.roomName))
         {
             Debug.Log("Creating a room: " + roomName + " with room for " + roomSize + " players.");
-            networkManager.matchMaker.CreateMatch(roomName, roomSize, true, "", "","", 0, 0, networkManager.OnMatchCreate);
+            networkManager.matchMaker.CreateMatch(roomName, roomSize, true, string.Empty, string.Empty,string.Empty, 0, 0, networkManager.OnMatchCreate);
         }
             
     }
