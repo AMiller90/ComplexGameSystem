@@ -49,7 +49,6 @@ namespace Assets.Scripts
         public void CmdChangeName(string newName)
         {
             this.pname = newName;
-
         }
 
         /// <summary>
@@ -140,7 +139,6 @@ namespace Assets.Scripts
                 this.syncarmRotation = Quaternion.identity;
             }
 
-            this.GetComponentsInChildren<TextMesh>()[0].text = this.pname;
         }
 
         /// <summary>
@@ -154,6 +152,7 @@ namespace Assets.Scripts
             }
 
             this.GetComponentsInChildren<TextMesh>()[0].text = this.pname;
+
             this.GetComponentsInChildren<TextMesh>()[1].text = this.phealth + "/" + this.pmaxhealth;
         
             if (!this.isLocalPlayer)
@@ -173,11 +172,15 @@ namespace Assets.Scripts
             {
                 GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
                 this.pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), this.pname);
-                this.GetComponentsInChildren<TextMesh>()[0].text = this.pname;
-                if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
+
+                if (!this.isServer)
                 {
-                    this.CmdChangeName(this.pname);
+                    if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
+                    {
+                        this.CmdChangeName(this.pname);
+                    }
                 }
+
             }
         }
     }

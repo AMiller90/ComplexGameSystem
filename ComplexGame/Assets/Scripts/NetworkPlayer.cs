@@ -171,7 +171,7 @@ namespace Assets.Scripts
         /// </summary>
         private void Update()
         {
-            if (!this.isLocalPlayer || PauseMenu.IsOn)
+            if (!this.isLocalPlayer || PauseMenu.IsOn || this.health <= 0)
             {
                 return;
             }
