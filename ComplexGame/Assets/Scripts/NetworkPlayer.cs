@@ -2,6 +2,7 @@
 namespace Assets.Scripts
 {
     using System.Collections;
+    using System.Runtime.CompilerServices;
 
     using UnityEngine;
     using UnityEngine.Networking;
@@ -61,7 +62,6 @@ namespace Assets.Scripts
         /// The max health.
         /// </summary>
         private float maxHealth;
-
 
         /// <summary>
         /// Gets or sets a value indicating whether jump prop.
@@ -171,6 +171,11 @@ namespace Assets.Scripts
         /// </summary>
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                PauseMenu.Self.TogglePauseMenu();
+            }
+
             if (!this.isLocalPlayer || PauseMenu.IsOn || this.health <= 0)
             {
                 return;
