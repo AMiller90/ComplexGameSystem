@@ -187,6 +187,7 @@ namespace Assets.Scripts
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
+                NetworkAudioManager.Self.CmdSendClipToServer(0);
                 this.GetComponent<Commands>().CmdShoot(dir);
             }
         }

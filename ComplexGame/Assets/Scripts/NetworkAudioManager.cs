@@ -12,34 +12,28 @@ namespace Assets.Scripts
     public class NetworkAudioManager : NetworkBehaviour
     {
         /// <summary>
-        /// The source.
-        /// </summary>
-        private AudioSource source;
-
-        /// <summary>
         /// The shoot clip.
         /// </summary>
         public AudioClip[] ShootClip;
 
         /// <summary>
-        /// The start.
+        /// The instance.
         /// </summary>
-        private void Start()
-        {
-            this.source = this.GetComponent<AudioSource>();
-        }
+        private static NetworkAudioManager instance;
 
         /// <summary>
-        /// The update.
+        /// The source.
         /// </summary>
-        private void Update()
+        private AudioSource source;
+
+        /// <summary>
+        /// Gets the self.
+        /// </summary>
+        public static NetworkAudioManager Self
         {
-            if (this.isLocalPlayer)
+            get
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0))
-                {
-                    this.CmdSendClipToServer(0);
-                }
+                return instance;
             }
         }
 
@@ -50,9 +44,18 @@ namespace Assets.Scripts
         /// The id.
         /// </param>
         [Command]
-        private void CmdSendClipToServer(int id)
+        public void CmdSendClipToServer(int id)
         {
             this.RpcSendSoundToClients(id);
+        }
+
+        /// <summary>
+        /// The start.
+        /// </summary>
+        private void Start()
+        {
+            instance = this;
+            this.source = this.GetComponent<AudioSource>();
         }
 
         /// <summary>

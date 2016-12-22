@@ -63,8 +63,8 @@ namespace Assets.Scripts
         /// </summary>
         public void TogglePauseMenu()
         {
-            instance.pauseMenu.SetActive(!instance.pauseMenu.activeSelf);
-            isOn = instance.pauseMenu.activeSelf;
+            this.pauseMenu.SetActive(!this.pauseMenu.activeSelf);
+            isOn = this.pauseMenu.activeSelf;
         }
 
         /// <summary>
