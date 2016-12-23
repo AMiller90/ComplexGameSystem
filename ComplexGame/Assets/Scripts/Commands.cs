@@ -139,8 +139,13 @@ namespace Assets.Scripts
             {
                 this.GetComponent<NetworkAnimator>().SetParameterAutoSend(0,true);
                 this.syncarmRotation = Quaternion.identity;
+                this.pname = RegisterPlayer.Self.PlayerName;
             }
 
+            if (!this.isServer)
+            {
+                this.CmdChangeName(this.pname);
+            }
         }
 
         /// <summary>
@@ -165,25 +170,25 @@ namespace Assets.Scripts
        
         }
 
-        /// <summary>
-        /// The on gui.
-        /// </summary>
-        private void OnGUI()
-        {
-            if (this.isLocalPlayer)
-            {
-                GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
-                this.pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), this.pname);
+        ///// <summary>
+        ///// The on gui.
+        ///// </summary>
+        //private void OnGUI()
+        //{
+        //    if (this.isLocalPlayer)
+        //    {
+        //        GUI.Box(new Rect(10, Screen.height - 100, 80, 30), "Enter Name");
+        //        this.pname = GUI.TextField(new Rect(10, Screen.height - 70, 80, 30), this.pname);
 
-                if (!this.isServer)
-                {
-                    if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
-                    {
-                        this.CmdChangeName(this.pname);
-                    }
-                }
+        //        if (!this.isServer)
+        //        {
+        //            if (GUI.Button(new Rect(10, Screen.height - 40, 80, 30), "Change"))
+        //            {
+        //                this.CmdChangeName(this.pname);
+        //            }
+        //        }
 
-            }
-        }
+        //    }
+        //}
     }
 }
