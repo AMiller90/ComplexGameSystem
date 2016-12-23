@@ -1,11 +1,13 @@
 ﻿
 namespace Assets.Scripts
 {
+    using System;
+
     using UnityEngine;
     using UnityEngine.Networking;
 
     /// <summary>
-    /// The commands.
+    /// The commands class - handles the command calls.
     /// </summary>
     public class Commands : NetworkBehaviour
     {

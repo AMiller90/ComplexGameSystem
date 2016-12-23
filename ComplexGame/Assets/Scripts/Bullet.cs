@@ -65,7 +65,7 @@ namespace Assets.Scripts
         /// </summary>
         private void Update()
         {
-            this.transform.position += this.direction * (Time.deltaTime *this.speed);
+            this.transform.position += this.direction * (Time.deltaTime * this.speed);
         }
 
         /// <summary>
@@ -76,8 +76,10 @@ namespace Assets.Scripts
         /// </param>
         private void OnTriggerEnter(Collider other)
         {
-            if (!this.isServer)
+            if (!this.isServer) 
+            {
                 return;
+            }
 
             NetworkPlayer p = other.gameObject.GetComponent<NetworkPlayer>();
 

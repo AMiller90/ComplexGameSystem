@@ -2,7 +2,6 @@
 namespace Assets.Scripts
 {
     using System.Collections;
-    using System.Runtime.CompilerServices;
 
     using UnityEngine;
     using UnityEngine.Networking;
@@ -171,11 +170,6 @@ namespace Assets.Scripts
         /// </summary>
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                PauseMenu.Self.TogglePauseMenu();
-            }
-
             if (!this.isLocalPlayer || PauseMenu.IsOn || this.health <= 0)
             {
                 return;

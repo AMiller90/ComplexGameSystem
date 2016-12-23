@@ -16,11 +16,6 @@ namespace Assets.Scripts
         private static bool isOn;
 
         /// <summary>
-        /// The instance.
-        /// </summary>
-        private static PauseMenu instance;
-
-        /// <summary>
         /// The network manager.
         /// </summary>
         private NetworkManager networkManager;
@@ -48,26 +43,6 @@ namespace Assets.Scripts
         }
 
         /// <summary>
-        /// Gets the self.
-        /// </summary>
-        public static PauseMenu Self
-        {
-            get
-            {
-                return instance;
-            }
-        }
-
-        /// <summary>
-        /// The toggle pause menu.
-        /// </summary>
-        public void TogglePauseMenu()
-        {
-            this.pauseMenu.SetActive(!this.pauseMenu.activeSelf);
-            isOn = this.pauseMenu.activeSelf;
-        }
-
-        /// <summary>
         /// The leave room.
         /// </summary>
         public void LeaveRoom()
@@ -77,14 +52,34 @@ namespace Assets.Scripts
             this.networkManager.StopHost();
         }
 
+
+        /// <summary>
+        /// The toggle pause menu.
+        /// </summary>
+        private void TogglePauseMenu()
+        {
+            this.pauseMenu.SetActive(!this.pauseMenu.activeSelf);
+            isOn = this.pauseMenu.activeSelf;
+        }
+
         /// <summary>
         /// The start function.
         /// </summary>
         private void Start()
         {
             isOn = false;
-            instance = this;
             this.networkManager = NetworkManager.singleton;
+        }
+
+        /// <summary>
+        /// The update.
+        /// </summary>
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                this.TogglePauseMenu();
+            }
         }
     }
 }
