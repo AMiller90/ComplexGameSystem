@@ -17,7 +17,7 @@ namespace Assets.Scripts
         /// <summary>
         /// The player name.
         /// </summary>
-        private string playername;
+        private string playername = "";
 
         /// <summary>
         /// Gets the self.

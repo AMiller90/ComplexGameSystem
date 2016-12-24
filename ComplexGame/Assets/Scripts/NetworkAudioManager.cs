@@ -1,8 +1,6 @@
 ﻿
 namespace Assets.Scripts
 {
-    using System.Runtime.InteropServices;
-
     using UnityEngine;
     using UnityEngine.Networking;
 
@@ -25,6 +23,17 @@ namespace Assets.Scripts
         /// The source.
         /// </summary>
         private AudioSource source;
+
+        /// <summary>
+        /// Gets the source.
+        /// </summary>
+        public AudioSource Source
+        {
+            get
+            {
+                return this.source;
+            }
+        }
 
         /// <summary>
         /// Gets the self.
@@ -56,6 +65,7 @@ namespace Assets.Scripts
         {
             instance = this;
             this.source = this.GetComponent<AudioSource>();
+            this.source.volume = AudioManager.Volume;
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 namespace Assets.Scripts
 {
     using UnityEngine;
+    using UnityEngine.UI;
     using UnityEngine.Networking;
 
     /// <summary>
@@ -27,12 +28,12 @@ namespace Assets.Scripts
         /// <summary>
         /// The set room name function.
         /// </summary>
-        /// <param name="aName">
+        /// <param name="name">
         /// The name.
         /// </param>
-        public void SetRoomName(string aName)
+        public void SetRoomName(InputField name)
         {
-            this.roomName = aName;
+            this.roomName = name.text;
         }
 
         /// <summary>
@@ -40,8 +41,9 @@ namespace Assets.Scripts
         /// </summary>
         public void CreateRoom()
         {
-            if (this.roomName != "")
+            if (this.roomName != "" && RegisterPlayer.Self.PlayerName != "")
             {
+                AudioManager.Self.PlayShotSound();
                 this.networkManager.matchMaker.CreateMatch(this.roomName, this.roomSize, true, string.Empty, string.Empty, string.Empty, 0, 0, this.networkManager.OnMatchCreate);
             }
         }
@@ -51,6 +53,7 @@ namespace Assets.Scripts
         /// </summary>
         private void Start()
         {
+            AudioManager.Self.Source.volume = AudioManager.Volume;
             this.networkManager = NetworkManager.singleton;
 
             if (this.networkManager.matchMaker == null)

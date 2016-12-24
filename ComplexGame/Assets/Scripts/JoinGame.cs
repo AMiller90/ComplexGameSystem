@@ -46,6 +46,7 @@ namespace Assets.Scripts
         /// </summary>
         public void RefreshRoomList()
         {
+            AudioManager.Self.PlayShotSound();
             this.ClearRoomList();
             this.networkManager.matchMaker.ListMatches(0, 20, string.Empty, true, 0, 0, this.OnMatchList);
             this.status.text = "Loading...";
@@ -103,6 +104,7 @@ namespace Assets.Scripts
         /// </param>
         public void JoinRoom(MatchInfoSnapshot match)
         {
+            AudioManager.Self.PlayShotSound();
             this.networkManager.matchMaker.JoinMatch(match.networkId, string.Empty, string.Empty, string.Empty, 0, 0, this.networkManager.OnMatchJoined);
             this.ClearRoomList();
             this.status.text = "Joining...";
