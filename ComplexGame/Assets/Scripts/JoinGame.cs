@@ -87,7 +87,6 @@ namespace Assets.Scripts
                 }
 
                 this.roomList.Add(roomListItemGo);
-
             }
 
             if (this.roomList.Count == 0)
@@ -104,10 +103,13 @@ namespace Assets.Scripts
         /// </param>
         public void JoinRoom(MatchInfoSnapshot match)
         {
-            AudioManager.Self.PlayShotSound();
-            this.networkManager.matchMaker.JoinMatch(match.networkId, string.Empty, string.Empty, string.Empty, 0, 0, this.networkManager.OnMatchJoined);
-            this.ClearRoomList();
-            this.status.text = "Joining...";
+            if(RegisterPlayer.Self.PlayerName != "")
+            {
+                AudioManager.Self.PlayShotSound();
+                this.networkManager.matchMaker.JoinMatch(match.networkId, string.Empty, string.Empty, string.Empty, 0, 0, this.networkManager.OnMatchJoined);
+                this.ClearRoomList();
+                this.status.text = "Joining...";
+            }
         }
 
         /// <summary>
